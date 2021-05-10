@@ -1,7 +1,8 @@
 import matplotlib as mpl
 import matplotlib.cm as cm
-from service import fileService
 import matplotlib.colors as clr
+from datetime import date
+import os
 
 def getSignificanceSymbol(pvalue, oneStar=0.05, twoStars=0.01, threeStars=0.001):
     symbol = ''
@@ -20,7 +21,12 @@ def createFontSizes(regular=24):
     return regular, medium, small, tiny
 
 def createTodayFormat():
-    return fileService.createTodayFormat()
+    today = date.today()
+    return today.strftime("%Y.%m.%d")
+
+def mkdir(directory):
+    if not os.path.exists(directory):
+        os.makedirs(directory)
 
 def createArialNarrowFont():
     mpl.rcParams['font.family'] = 'Arial'
@@ -28,7 +34,7 @@ def createArialNarrowFont():
     return {'fontname':'Arial', 'stretch' : 'condensed'}
 
 def savefigWithResolution(fig, outputDir, filePrefix, dpi=100, ext='png'):
-    fileService.mkdir(outputDir)
+    mkdir(outputDir)
     filename = outputDir + filePrefix + '.' + ext
     fig.savefig(filename, dpi=dpi, format=ext, bbox_inches='tight', orientation='portrait')
     print("Output " + filename)
